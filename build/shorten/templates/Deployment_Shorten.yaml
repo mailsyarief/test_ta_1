@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shorten
+  labels:
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shorten
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: shorten
+        tier: backend
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: shorten-env-config
+            items:
+              - key: config
+                path: .env        
+      containers:
+      - name: shorten
+        image: mailsyarief/laravel_shorten:1
+        volumeMounts:
+          - name: config
+            mountPath: /var/www/html/.env
+            subPath: .env
+        ports:
+        - containerPort: 80

@@ -5,12 +5,13 @@ services:
       container_name: c-db
       restart: always
       image: mariadb:latest
-      expose:
-        - "3306"
       ports:
         - "3306:3306"
-      environment: 
-        - MYSQL_ROOT_PASSWORD=root_password
+      volumes: 
+        - ./mysql:/var/lib/mysql
+      environment:
+        - MYSQL_DATABASE=laravel
+        - MYSQL_ROOT_PASSWORD=root
 
     pma:
       container_name: c-pma
@@ -29,5 +30,3 @@ services:
         - "80:80"
       volumes:
         - ./application:/var/www/html
-      depends_on:
-        - mariadb
